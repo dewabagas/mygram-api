@@ -38,10 +38,11 @@ exports.register = async (req, res) => {
                 phone_number: user.phone_number,
             })
 
-            res.status(200).send({
+            res.status(201).send({
                 status: 'SUCCESS',
                 message: 'User created',
-                token: token
+                result: user,
+                token: token,
             })
         }).catch(error => {
             console.log("error", error)
@@ -49,6 +50,45 @@ exports.register = async (req, res) => {
                 status: 'FAILED',
                 message: 'user creation failed'
             })
+        })
+    })
+}
+
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
+
+    User.findOne({
+        where: {
+            email: email
+        }
+    }).then(user => {
+        if (!user) {
+            return res.status(400).send({
+                message: 'Email not found'
+            })
+        }
+
+        const isValid = bcrypt.compareSync(password, user.password);
+
+        if (!isValid) {
+            return res.status(400).send({
+                message: 'Email and password not match'
+            })
+        }
+
+        const token = generateToken({
+            id: user.id,
+            full_name: user.full_name,
+            email: user.email,
+            username: user.username,
+            profile_image_url: user.profile_image_url,
+            age: user.age,
+            phone_number: user.phone_number,
+        })
+        res.status(200).send({
+            status: 'SUCCESS',
+            message: 'Login Success',
+            token: token
         })
     })
 }
