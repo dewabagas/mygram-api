@@ -3,7 +3,7 @@ const Joi = require('joi')
 
 exports.validateUserRegister = async (req, res, next) => {
     const schema = Joi.object().keys({
-        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+        email: Joi.string().email().required(),
         full_name: Joi.string().required(),
         username: Joi.string().alphanum()
             .min(3)
@@ -23,7 +23,7 @@ exports.validateUserRegister = async (req, res, next) => {
 
 exports.validateUserLogin = async (req, res, next) => {
     const schema = Joi.object().keys({
-        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+        email: Joi.string().email().required(),
         password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).min(6).required(),
     });
     if (schema.validate(req.body).error) {

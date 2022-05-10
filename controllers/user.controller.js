@@ -92,3 +92,55 @@ exports.login = async (req, res) => {
         })
     })
 }
+
+exports.editUser = async (req, res) => {
+    console.log('reqsss ', req.id)
+    const { full_name, email, username, password, profile_image_url, age, phone_number } = req.body;
+
+    User.findOne({where: {id: req.id}, 
+    }).then(result => {
+        const salt = bcrypt.genSaltSync(10)
+        const hash = bcrypt.hashSync(password, salt)
+
+        User.update({
+            full_name: full_name,
+            email: email,
+            username: username,
+            password: hash,
+            profile_image_url: profile_image_url,
+            age: age,
+            phone_number: phone_number,
+        }, {
+            where: { id: req.id }
+        }).then(user => {
+            res.status(200).send({
+                status: 'SUCCESS',
+                message: 'User updated',
+                result: user
+            })
+        })
+    }).catch(error => {
+        res.status(503).send({
+            status: "FAILED",
+            message: "User not found"
+        })
+    })
+
+}
+
+exports.deleteUser = async (req, res) => {
+
+    User.findOne({
+        where: {
+            email: email
+        }
+    }).then(user => {
+        if (!user) {
+            return res.status(400).send({
+                message: 'Email not found'
+            })
+        }
+
+    })
+
+}
