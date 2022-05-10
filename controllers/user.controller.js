@@ -94,35 +94,42 @@ exports.login = async (req, res) => {
 }
 
 exports.editUser = async (req, res) => {
-    console.log('reqsss ', req.id)
     const { full_name, email, username, password, profile_image_url, age, phone_number } = req.body;
 
-    User.findOne({where: {id: req.id}, 
+    User.findOne({
+        where: { id: req.params.userId },
     }).then(result => {
-        const salt = bcrypt.genSaltSync(10)
-        const hash = bcrypt.hashSync(password, salt)
+        if (result) {
+            const salt = bcrypt.genSaltSync(10)
+            const hash = bcrypt.hashSync(password, salt)
 
-        User.update({
-            full_name: full_name,
-            email: email,
-            username: username,
-            password: hash,
-            profile_image_url: profile_image_url,
-            age: age,
-            phone_number: phone_number,
-        }, {
-            where: { id: req.id }
-        }).then(user => {
-            res.status(200).send({
-                status: 'SUCCESS',
-                message: 'User updated',
-                result: user
+            User.update({
+                full_name: full_name,
+                email: email,
+                username: username,
+                password: hash,
+                profile_image_url: profile_image_url,
+                age: age,
+                phone_number: phone_number,
+            }, {
+                where: { id: req.params.userId }
+            }).then(user => {
+                res.status(200).send({
+                    status: 'SUCCESS',
+                    message: 'User updated',
+                    result: user
+                })
             })
-        })
+        } else {
+            res.status(404).send({
+                status: "FAILED",
+                message: "User not found"
+            })
+        }
     }).catch(error => {
         res.status(503).send({
             status: "FAILED",
-            message: "User not found"
+            message: `${error}`
         })
     })
 
@@ -132,15 +139,28 @@ exports.deleteUser = async (req, res) => {
 
     User.findOne({
         where: {
-            email: email
+            id: req.params.userId
         }
-    }).then(user => {
-        if (!user) {
-            return res.status(400).send({
-                message: 'Email not found'
+    }).then(result => {
+        if (result) {
+            User.destroy({ where: { id: req.params.userId } }).then(user => {
+                res.status(200).send({
+                    status: 'SUCCESS',
+                    message: 'User Deleted',
+                    result: user
+                })
+            })
+        } else {
+            res.status(404).send({
+                status: "FAILED",
+                message: "User not found"
             })
         }
-
+    }).catch(error => {
+        res.status(503).send({
+            status: "FAILED",
+            message: `${error}`
+        })
     })
 
 }
