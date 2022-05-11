@@ -5,5 +5,6 @@ const socialMedia = require('../middlewares/socialMediaValidations');
 const middleware = require('../middlewares/auth')
 
 router.post('/', middleware.verify, socialMedia.validateSocialMedia, controller.addSocialMedia);
+router.get('/', middleware.verify, controller.getSocialMedia);
 
 module.exports = router;
