@@ -4,6 +4,7 @@
     "db-migrate-pg": "^1.2.2",
     "dotenv": "^16.0.0",
     "express": "^4.18.1",
+    "jest": "^28.1.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.3",
@@ -12,5 +13,29 @@
     "pg": "^8.7.3",
     "sequelize": "^6.19.0",
     "sequelize-cli": "^6.4.1"
+  },
+  "name": "mygram-api",
+  "description": "<h1 align=\"center\"> Final Projects #2 : MyGram API </h1>",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "db:migrate": "sequelize db:migrate",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dewabagas/mygram-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dewabagas/mygram-api/issues"
+  },
+  "homepage": "https://github.com/dewabagas/mygram-api#readme",
+  "devDependencies": {
+    "jest": "^28.0.2",
+    "supertest": "^6.2.3"
   }
 }

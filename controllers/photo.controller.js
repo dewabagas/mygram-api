@@ -25,21 +25,22 @@ exports.addPhoto = async (req, res) => {
 }
 
 exports.getPhoto = async (req, res) => {
-    User.findOne({
-        where: { id: req.id },
-        include: {
-            model: Photo,
-            as: 'photos'
-        }
+    Photo.findAll({
+        where: { userid: req.id }, include: [
+            {
+                model: User,
+                as: 'user',
+            }
+        ]
     }).then(result => {
-        res.status(200).send({
+        res.status(201).send({
             status: "SUCCESS",
-            data: result
+            photos: result
         })
     }).catch(error => {
         res.status(503).send({
             status: "FAILED",
-            message: "failed load photo"
+            message: "failed load products"
         })
     })
 }
@@ -53,28 +54,35 @@ exports.editPhoto = async (req, res) => {
             id: req.params.photoid
         }
     }).then(result => {
-        if (req.id != result.userid) {
-            return res.status(403).send({
-                err: 'Forbidden'
+        if (result) {
+            if (req.id != result.userid) {
+                return res.status(403).send({
+                    err: 'Forbidden'
+                })
+            }
+
+            Photo.update({
+                poster_image_url: poster_image_url,
+                title: title,
+                caption: caption,
+            }, {
+                where: {
+                    id: req.params.photoid
+                }
+            }).then(photo => {
+                console.log('photo', photo)
+                res.status(201).send({
+                    status: "SUCCESS",
+                    message: "Photo updated",
+                    result: result
+                })
+            })
+        } else {
+            res.status(404).send({
+                status: "FAILED",
+                message: "Photo not found"
             })
         }
-
-        Photo.update({
-            poster_image_url: poster_image_url,
-            title: title,
-            caption: caption,
-        }, {
-            where: {
-                id: req.params.photoid
-            }
-        }).then(photo => {
-            console.log('photo', photo)
-            res.status(201).send({
-                status: "SUCCESS",
-                message: "Photo updated",
-                result: result
-            })
-        })
     }).catch(error => {
         res.status(503).send({
             status: "FAILED",
@@ -89,28 +97,36 @@ exports.deletePhoto = async (req, res) => {
             id: req.params.photoid
         }
     }).then(result => {
-        if (req.id != result.userid) {
-            return res.status(403).send({
-                err: 'Forbidden'
+        if (result) {
+            if (req.id != result.userid) {
+                return res.status(403).send({
+                    err: 'Forbidden'
+                })
+            }
+
+            Photo.destroy({
+                where: {
+                    id: req.params.photoid
+                }
+            }).then(photo => {
+                res.status(200).send({
+                    status: 'SUCCESS',
+                    message: 'Photo deleted',
+                    result: photo
+                })
+            })
+        } else {
+            res.status(404).send({
+                status: 'FAILED',
+                message: 'Photo not found'
             })
         }
 
-        Photo.destroy({
-            where: {
-                id: req.params.photoid
-            }
-        }).then(photo => {
-            res.status(200).send({
-                status: 'SUCCESS',
-                message: 'Photo deleted',
-                result: photo
-            })
-        }).catch(error => {
-            console.log("error", error)
-            res.status(503).send({
-                status: 'FAILED',
-                message: 'Photo deletion failed'
-            })
+    }).catch(error => {
+        console.log("error", error)
+        res.status(503).send({
+            status: 'FAILED',
+            message: 'Photo deletion failed'
         })
     })
 }

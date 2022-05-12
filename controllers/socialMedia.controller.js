@@ -90,7 +90,7 @@ exports.deleteSocialMedia = async (req, res) => {
         SocialMedia.destroy({ where: { id: req.params.socialMediaId } }).then(socialmedia => {
             res.status(200).send({
                 status: 'SUCCESS',
-                message: 'Social Media Deleted',
+                message: 'Your social media has been successfully deleted',
                 result: socialmedia
             })
         })

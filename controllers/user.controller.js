@@ -146,7 +146,7 @@ exports.deleteUser = async (req, res) => {
             User.destroy({ where: { id: req.params.userId } }).then(user => {
                 res.status(200).send({
                     status: 'SUCCESS',
-                    message: 'User Deleted',
+                    message: 'Your account has been successfully deleted',
                     result: user
                 })
             })
