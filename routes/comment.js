@@ -1,0 +1,12 @@
+const express = require('express');
+const router = express.Router();
+const controller = require('../controllers/comment.controller');
+const comment = require('../middlewares/commentValidations');
+const middleware = require('../middlewares/auth');
+
+router.post('/', middleware.verify, comment.validateComment, controller.addComment);
+router.get('/', middleware.verify, controller.getComment);
+router.put('/:commentid', middleware.verify, controller.editComment);
+router.delete('/:commentid', middleware.verify, controller.deleteComment);
+
+module.exports = router;
