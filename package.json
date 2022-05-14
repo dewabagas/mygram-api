@@ -1,9 +1,11 @@
 {
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "coverage": "^0.4.1",
     "db-migrate-pg": "^1.2.2",
     "dotenv": "^16.0.0",
     "express": "^4.18.1",
+    "jest": "^28.1.0",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.3",
@@ -12,5 +14,26 @@
     "pg": "^8.7.3",
     "sequelize": "^6.19.0",
     "sequelize-cli": "^6.4.1"
-  }
+  },
+  "name": "mygram-api",
+  "description": "<h1 align=\"center\"> Final Projects #2 : MyGram API <Hacktiv8> </h1>",
+  "version": "1.0.0",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dewabagas/mygram-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dewabagas/mygram-api/issues"
+  },
+  "homepage": "https://github.com/dewabagas/mygram-api#readme"
 }
