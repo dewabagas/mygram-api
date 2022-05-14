@@ -1,5 +1,6 @@
 const Photo = require('../models/index').Photo;
 const User = require('../models/index').User;
+const Comment = require('../models/index').Comment;
 
 exports.addPhoto = async (req, res, next) => {
     const { poster_image_url, title, caption } = req.body;
@@ -24,16 +25,29 @@ exports.addPhoto = async (req, res, next) => {
 }
 
 exports.getPhoto = async (req, res, next) => {
-    User.findOne({
+    Photo.findAll({
+
+        include: [{
+            model: Comment,
+            as: 'comments',
+            attributes: ['comment'],
+            include: {
+                model: User,
+                as: 'user',
+                attributes: ['username']
+            }
+        },
+        {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'username', 'profile_image_url'],
+        },
+        ],
         where: { id: req.id },
-        include: {
-            model: Photo,
-            as: 'photos'
-        }
     }).then(result => {
         res.status(200).send({
             status: "SUCCESS",
-            data: result
+            Photo: result
         })
     }).catch(error => {
         res.status(503).send({
@@ -41,6 +55,46 @@ exports.getPhoto = async (req, res, next) => {
             message: "failed load photo"
         })
     })
+
+
+    // try {
+    //     const userid = req.id;
+
+    //     const Photos = await Photo.findAll({
+    //         include: [
+    //             {
+    //                 model: Comment,
+    //                 as: 'comments',
+    //                 attributes: ['comment'],
+    //                 include: [
+    //                     {
+    //                         model: User,
+    //                         required: true,
+    //                         as: 'user',
+    //                         attributes: ['username']
+    //                     }
+    //                 ]
+    //             },
+    //             {
+    //                 model: User,
+    //                 as: 'user',
+    //                 attributes: ['id', 'username', 'profile_image_url'],
+    //             },
+    //         ],
+    //         where: { userid: userid },
+    //         subQuery: false
+    //     });
+
+    //     return res.status(200).send({
+    //         Photo: Photos
+    //     });
+    // }
+    // catch (error) {
+    //     return res.status(503).send({
+    //         status: "FAILED",
+    //         message: "failed load photo"
+    //     });
+    // }
 }
 
 exports.editPhoto = async (req, res, next) => {
@@ -81,6 +135,7 @@ exports.editPhoto = async (req, res, next) => {
     })
 }
 
+
 exports.deletePhoto = async (req, res, next) => {
     Photo.findOne({
         where: {
@@ -100,7 +155,7 @@ exports.deletePhoto = async (req, res, next) => {
         }).then(photo => {
             res.status(200).send({
                 status: 'SUCCESS',
-                message: 'Photo deleted',
+                message: 'Your Photo has been successfully deleted',
                 result: photo
             })
         }).catch(error => {
