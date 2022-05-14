@@ -1,9 +1,8 @@
 const Photo = require('../models/index').Photo;
 const User = require('../models/index').User;
 
-exports.addPhoto = async (req, res) => {
+exports.addPhoto = async (req, res, next) => {
     const { poster_image_url, title, caption } = req.body;
-    console.log('req id', req.id)
 
     Photo.create({
         poster_image_url: poster_image_url,
@@ -24,7 +23,7 @@ exports.addPhoto = async (req, res) => {
     })
 }
 
-exports.getPhoto = async (req, res) => {
+exports.getPhoto = async (req, res, next) => {
     User.findOne({
         where: { id: req.id },
         include: {
@@ -44,9 +43,8 @@ exports.getPhoto = async (req, res) => {
     })
 }
 
-exports.editPhoto = async (req, res) => {
+exports.editPhoto = async (req, res, next) => {
     const { poster_image_url, title, caption } = req.body;
-    console.log('req id', req.id)
 
     Photo.findOne({
         where: {
@@ -83,7 +81,7 @@ exports.editPhoto = async (req, res) => {
     })
 }
 
-exports.deletePhoto = async (req, res) => {
+exports.deletePhoto = async (req, res, next) => {
     Photo.findOne({
         where: {
             id: req.params.photoid
@@ -106,7 +104,6 @@ exports.deletePhoto = async (req, res) => {
                 result: photo
             })
         }).catch(error => {
-            console.log("error", error)
             res.status(503).send({
                 status: 'FAILED',
                 message: 'Photo deletion failed'

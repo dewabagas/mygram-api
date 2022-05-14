@@ -1,9 +1,8 @@
 const Comment = require('../models/index').Comment;
 const User = require('../models/index').User;
 
-exports.addComment = async (req, res) => {
+exports.addComment = async (req, res, next) => {
     const { photoid, comment } = req.body;
-    console.log('req id', req.id);
 
     Comment.create({
         photoid: photoid,
@@ -16,7 +15,6 @@ exports.addComment = async (req, res) => {
             result: comment
         })
     }).catch(error => {
-        console.log("error", error)
         res.status(503).send({
             status: 'FAILED',
             message: 'Comment creation failed'
@@ -24,7 +22,7 @@ exports.addComment = async (req, res) => {
     })
 }
 
-exports.getComment = async (req, res) => {
+exports.getComment = async (req, res, next) => {
     User.findOne({
         where: { id: req.id },
         include: {
@@ -44,9 +42,8 @@ exports.getComment = async (req, res) => {
     })
 }
 
-exports.editComment = async (req, res) => {
+exports.editComment = async (req, res, next) => {
     const { comment } = req.body;
-    console.log('req id', req.id)
 
     Comment.findOne({
         where: {
@@ -79,7 +76,7 @@ exports.editComment = async (req, res) => {
     })
 }
 
-exports.deleteComment = async (req, res) => {
+exports.deleteComment = async (req, res, next) => {
     Comment.findOne({
         where: {
             id: req.params.commentid
@@ -102,7 +99,6 @@ exports.deleteComment = async (req, res) => {
                 result: comment
             })
         }).catch(error => {
-            console.log("error", error)
             res.status(503).send({
                 status: 'FAILED',
                 message: 'Comment deletion failed'
