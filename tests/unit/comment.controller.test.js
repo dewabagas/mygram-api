@@ -44,38 +44,30 @@ describe('CommentController.addComment', () => {
 })
 
 describe('CommentController.getComment', () => {
-    it('should return status code 201', async () => {
-        const user = {
-            id: 1,
-            comments: [{
-                id: 1,
-                photoid: 1,
-                comment: 'ayo kita bermain',
-                userid: 1
-            }]
+    it('should return status code 200', async () => {
+        const comment = {
+            photoid: 1,
+            comment: 'ayo kita bermain',
+            userid: 1
         };
-        const userModel = {
-            findOne: jest.fn(() => Promise.resolve(user))
+        const commentModel = {
+            findAll: jest.fn(() => Promise.resolve(comment))
         };
-        User.findOne = userModel.findOne
+        Comment.findAll = commentModel.findAll
         await CommentController.getComment(req, res, next);
-        expect(res.statusCode) == (201)
+        expect(res.statusCode) == (200)
     })
 
     it('should return status code 503', async () => {
-        const user = {
-            id: 1,
-            comments: [{
-                id: 1,
-                photoid: 1,
-                comment: 'ayo kita bermain',
-                userid: 1
-            }]
+        const comment = {
+            photoid: 1,
+            comment: 'ayo kita bermain',
+            userid: 1
         };
-        const userModel = {
-            findOne: jest.fn(() => Promise.reject(user))
+        const commentModel = {
+            findAll: jest.fn(() => Promise.reject(comment))
         };
-        User.findOne = userModel.findOne
+        Comment.findAll = commentModel.findAll
         await CommentController.getComment(req, res, next);
         expect(res.statusCode) == (503)
     })
@@ -121,9 +113,6 @@ describe('CommentController.deleteComment', () => {
     it('should return status code 201', async () => {
         const comment = {
             id: 1,
-            photoid: 1,
-            comment: 'ayo kita bermain',
-            userid: 1
         };
         const commentModel = {
             findOne: jest.fn(() => Promise.resolve(comment)),
@@ -134,5 +123,4 @@ describe('CommentController.deleteComment', () => {
         await CommentController.deleteComment(req, res, next);
         expect(res.statusCode) == (201)
     })
-
 })
