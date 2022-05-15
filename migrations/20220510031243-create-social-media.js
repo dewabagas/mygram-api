@@ -25,7 +25,18 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    })
+      .then(() => {
+        queryInterface.addConstraint('SocialMedia', {
+          type: "foreign key",
+          fields: ['userid'],
+          name: "socialmedia_user_fk",
+          references: {
+            table: 'Users',
+            field: 'id'
+          }
+        })
+      })
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('SocialMedia');

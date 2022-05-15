@@ -25,7 +25,33 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    })
+      .then(() => {
+        return queryInterface.addConstraint('Comments', {
+          fields: ['userid'],
+          type: "foreign key",
+          name: "comment_user_fk",
+          references: {
+            table: 'Users',
+            field: 'id'
+          },
+          onDelete: 'cascade',
+          onUpdate: 'cascade'
+        });
+      })
+      .then(() => {
+        queryInterface.addConstraint('Comments', {
+          fields: ['photoid'],
+          type: "foreign key",
+          name: "comment_photo_fk",
+          references: {
+            table: 'Photos',
+            field: 'id'
+          },
+          onDelete: 'cascade',
+          onUpdate: 'cascade'
+        });
+      });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Comments');

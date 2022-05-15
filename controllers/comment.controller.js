@@ -1,5 +1,6 @@
 const Comment = require('../models/index').Comment;
 const User = require('../models/index').User;
+const Photo = require('../models/index').Photo;
 
 exports.addComment = async (req, res, next) => {
     const { photoid, comment } = req.body;
@@ -12,7 +13,7 @@ exports.addComment = async (req, res, next) => {
         res.status(201).send({
             status: 'SUCCESS',
             message: 'Comment Added',
-            result: comment
+            comment: comment
         })
     }).catch(error => {
         res.status(503).send({
@@ -23,21 +24,30 @@ exports.addComment = async (req, res, next) => {
 }
 
 exports.getComment = async (req, res, next) => {
-    User.findOne({
-        where: { id: req.id },
-        include: {
-            model: Comment,
-            as: 'comments'
-        }
+    Comment.findAll({
+
+        include: [{
+            model: Photo,
+            as: 'photo',
+            attributes: ['id', 'title', 'caption', 'poster_image_url'],
+        },
+        {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'username', 'profile_image_url', 'phone_number'],
+        }],
+        where: { photoid: req.id },
     }).then(result => {
-        res.status(201).send({
-            status: "SUCCESS",
-            data: result
+        res.status(200).send({
+            status: 'SUCCESS',
+            message: 'Comment retrieved',
+            Comments: result
         })
+
     }).catch(error => {
         res.status(503).send({
-            status: "FAILED",
-            message: "failed load comment"
+            status: 'FAILED',
+            message: 'Comment load failed'
         })
     })
 }
@@ -95,7 +105,7 @@ exports.deleteComment = async (req, res, next) => {
         }).then(comment => {
             res.status(200).send({
                 status: 'SUCCESS',
-                message: 'Comment deleted',
+                message: 'Your Comment has been successfully deleted',
                 result: comment
             })
         }).catch(error => {
