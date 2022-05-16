@@ -12,6 +12,10 @@ git clone git@github.com:dewabagas/mygram-api.git
 npm install
 ```
 
+## Heroku URL
+```sh
+https://hacktiv8-mygram-api.herokuapp.com
+```
 ## Credits
 * Bagas Dewanggono, INJS-KS02-007, Computer Science, UPI.
 * Hisyam Dzaki Suatma, INJS-KS02-006, Informatics Engineering.
