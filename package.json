@@ -24,7 +24,11 @@
   },
   "scripts": {
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "start": "node app.js",
+    "db:create:migration": "sequelize migration:generate --name",
+    "db:migrate": "sequelize db:migrate",
+    "db:rollback": "sequelize migration:undo"
   },
   "repository": {
     "type": "git",
