@@ -3,7 +3,6 @@ const User = require("../models/index").User;
 
 exports.addSocialMedia = async (req, res) => {
     const { name, social_media_url } = req.body;
-    console.log('req id', req.id);
 
     SocialMedia.create({
         name: name,
@@ -45,7 +44,6 @@ exports.getSocialMedia = async (req, res) => {
 
 exports.editSocialMedia = async (req, res) => {
     const { name, social_media_url } = req.body;
-    console.log('req id', req.id)
 
     SocialMedia.findOne({
         where: { id: req.params.socialMediaId }

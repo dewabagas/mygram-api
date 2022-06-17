@@ -13,7 +13,8 @@
     "nodemon": "^2.0.16",
     "pg": "^8.7.3",
     "sequelize": "^6.19.0",
-    "sequelize-cli": "^6.4.1"
+    "sequelize-cli": "^6.4.1",
+    "supertest": "^6.2.3"
   },
   "name": "mygram-api",
   "description": "<h1 align=\"center\"> Final Projects #2 : MyGram API <Hacktiv8> </h1>",
